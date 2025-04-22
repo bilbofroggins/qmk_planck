@@ -28,9 +28,8 @@ uint8_t NUM_CUSTOM_SHIFT_KEYS = sizeof(custom_shift_keys) / sizeof(custom_shift_
 #define ARROWS_LAYER 2
 #define NUMPAD_LAYER 3
 #define MEDIA_LAYER 4
-#define FUNCTION_LAYER 5
-#define MACRO_LAYER 6
-#define SECONDARY_SPECIALS_LAYER 7
+#define MACRO_LAYER 5
+#define SECONDARY_SPECIALS_LAYER 6
 
 // Track which layer we're currently in
 uint8_t current_layer = ALPHA_LAYER;
@@ -108,20 +107,20 @@ void housekeeping_task_user(void) {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // ALPHA
     [ALPHA_LAYER] = LAYOUT_planck_2x2u(
-// TAB      , Q                   , W      , E      , R    , T   , Y     , U   , I      , O     , P      , DEL    ,
-LT(2,KC_TAB), LT(MACRO_LAYER,KC_Q), KC_W   , KC_E   , KC_R , KC_T, KC_Y  , KC_U, KC_I   , KC_O  , KC_P   , KC_BSPC,
-MO(1)       , KC_A                , KC_S   , KC_D   , KC_F , KC_G, KC_H  , KC_J, KC_K   , KC_L  , KC_QUOT, KC_ENT ,
-KC_LSFT     , KC_Z                , KC_X   , KC_C   , KC_V , KC_B, KC_N  , KC_M, KC_COMM, KC_DOT, KC_SLSH, KC_RSFT,
-MO(4)       , KC_LCTL             , KC_LALT, KC_LGUI, OSL(3)      , KC_SPC      , KC_ESC , MO(5) , KC_LEFT, KC_RGHT
+// TAB                 , Q                   , W      , E      , R                , T   , Y     , U   , I      , O              , P      , DEL    ,
+LT(ARROWS_LAYER,KC_TAB), LT(MACRO_LAYER,KC_Q), KC_W   , KC_E   , KC_R             , KC_T, KC_Y  , KC_U, KC_I   , KC_O           , KC_P   , KC_BSPC,
+MO(SPECIALS_LAYER)     , KC_A                , KC_S   , KC_D   , KC_F             , KC_G, KC_H  , KC_J, KC_K   , KC_L           , KC_QUOT, KC_ENT ,
+KC_LSFT                , KC_Z                , KC_X   , KC_C   , KC_V             , KC_B, KC_N  , KC_M, KC_COMM, KC_DOT         , KC_SLSH, KC_RSFT,
+KC_NO                  , KC_LCTL             , KC_LALT, KC_LGUI, OSL(NUMPAD_LAYER)      , KC_SPC      , KC_ESC , MO(MEDIA_LAYER), KC_LEFT, KC_RGHT
       ),
 
     // SPECIALS
     [SPECIALS_LAYER] = LAYOUT_planck_2x2u(
-// TAB , Q      , W      , E      , R    , T         , Y      , U      , I      , O      , P      , DEL         ,
-KC_NO  , KC_GRV , KC_NO  , KC_NO  , KC_NO, KC_NO     , KC_NO  , KC_LCBR, KC_RCBR, KC_PLUS, KC_DQUO, KC_PIPE     ,
-KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO     , KC_SCLN, KC_LPRN, KC_RPRN, KC_EQL , KC_COLN, LSFT(KC_ENT),
-KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO, LCTL(KC_B), KC_NO  , KC_LBRC, KC_RBRC, KC_MINS, KC_BSLS, KC_TRNS     ,
-KC_NO  , KC_TRNS, KC_TRNS, KC_TRNS, MO(7)            , KC_TRNS         , KC_TRNS, QK_LLCK, KC_TRNS, KC_TRNS     
+// TAB , Q      , W      , E      , R                           , T         , Y      , U      , I      , O      , P      , DEL         ,
+KC_NO  , KC_GRV , KC_NO  , KC_NO  , KC_NO                       , KC_NO     , KC_NO  , KC_LCBR, KC_RCBR, KC_PLUS, KC_DQUO, KC_PIPE     ,
+KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO                       , KC_NO     , KC_SCLN, KC_LPRN, KC_RPRN, KC_EQL , KC_COLN, LSFT(KC_ENT),
+KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO                       , LCTL(KC_B), KC_NO  , KC_LBRC, KC_RBRC, KC_MINS, KC_BSLS, KC_TRNS     ,
+KC_NO  , KC_TRNS, KC_TRNS, KC_TRNS, MO(SECONDARY_SPECIALS_LAYER)            , KC_TRNS         , KC_TRNS, QK_LLCK, KC_TRNS, KC_TRNS     
       ),
 
     // ARROWS
@@ -135,24 +134,15 @@ KC_NO  , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_TRNS         , KC_NO  , Q
 
     // NUMPAD
     [NUMPAD_LAYER] = LAYOUT_planck_2x2u(
-// TAB , Q      , W      , E      , R      , T    , Y      , U   , I   , O      , P      , DEL          ,
-KC_NO  , KC_1   , KC_2   , KC_3   , KC_4   , KC_5 , KC_6   , KC_7, KC_8, KC_9   , KC_0   , LALT(KC_BSPC),
-MO(7)  , KC_NO  , KC_F4  , KC_F5  , KC_F6  , KC_NO, KC_NO  , KC_4, KC_5, KC_6   , KC_NO  , KC_TRNS      ,
-KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_0   , KC_1, KC_2, KC_3   , KC_SLSH, KC_TRNS      ,
-KC_NO  , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_UNDS      , KC_0, QK_LLCK, KC_TRNS, KC_TRNS      
+// TAB                      , Q      , W      , E      , R      , T    , Y      , U   , I   , O      , P      , DEL          ,
+KC_NO                       , KC_1   , KC_2   , KC_3   , KC_4   , KC_5 , KC_6   , KC_7, KC_8, KC_9   , KC_0   , LALT(KC_BSPC),
+MO(SECONDARY_SPECIALS_LAYER), KC_NO  , KC_F4  , KC_F5  , KC_F6  , KC_NO, KC_NO  , KC_4, KC_5, KC_6   , KC_NO  , KC_TRNS      ,
+KC_TRNS                     , KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_0   , KC_1, KC_2, KC_3   , KC_SLSH, KC_TRNS      ,
+KC_NO                       , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_UNDS      , KC_0, QK_LLCK, KC_TRNS, KC_TRNS      
       ),
 
     // MEDIA
     [MEDIA_LAYER] = LAYOUT_planck_2x2u(
-// TAB , Q      , W      , E      , R      , T    , Y    , U      , I      , O      , P      , DEL    ,
-KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO  , KC_NO  ,
-KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO, KC_NO , KC_NO , KC_NO , KC_NO  , KC_TRNS,
-KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO, KC_NO, KC_NO, KC_NO  , KC_NO  , KC_TRNS,
-KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_NO         , KC_NO  , QK_LLCK, KC_TRNS, KC_TRNS
-      ),
-
-    // FUNCTION
-    [FUNCTION_LAYER] = LAYOUT_planck_2x2u(
 // TAB , Q      , W      , E      , R      , T    , Y    , U    , I      , O      , P      , DEL    ,
 QK_BOOT, KC_NO  , KC_F7  , KC_F8  , KC_F9  , KC_NO, KC_NO, KC_NO, KC_MUTE, KC_VOLD, KC_VOLU, KC_NO  ,
 KC_NO  , KC_NO  , KC_F4  , KC_F5  , KC_F6  , KC_NO, KC_NO, KC_NO, KC_F13 , KC_F14 , KC_F15 , KC_TRNS,
