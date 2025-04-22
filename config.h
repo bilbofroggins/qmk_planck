@@ -6,5 +6,5 @@
 // Time in milliseconds after which the orbital mouse direction resets to up (0)
 // Set to 0 to disable auto-reset
 #define ORBITAL_MOUSE_RESET_TIMEOUT_MS 3000
-#define TAPPING_TERM 5
-#define RETRO_TAPPING
+
+#define HOLD_ON_OTHER_KEY_PRESS

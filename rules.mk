@@ -9,4 +9,6 @@ SRC += features/custom_shift_keys.c
 SRC += features/orbital_mouse.c
 MOUSE_ENABLE = yes
 
-CONSOLE_ENABLE = yes
+# DEBUG
+#CONSOLE_ENABLE = yes
+#DEBUG_ENABLE = yes
