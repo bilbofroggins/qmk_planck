@@ -9,17 +9,19 @@
 enum custom_keycodes {
     MAC_VIM_SEARCH = SAFE_RANGE,
     MAC_QUOT_SURROUND,
-    TAB_KEY
+    MAC_EMAIL,
+    MAC_NAME,
+    TAB_KEY,
+    NUMPAD_MO,
+    SPECIALS_MO
 };
 
 #define KC_UNDO LCMD(KC_Z)
 
 const custom_shift_key_t custom_shift_keys[] = {
   {KC_QUOT, KC_COLN},
-  {KC_UNDS, KC_SPC},
   {KC_TAB, KC_TILD},
-  {KC_COMM, KC_SCLN},
-  {KC_DOT, KC_TILD},
+  {KC_COMM, KC_TILD},
 };
 uint8_t NUM_CUSTOM_SHIFT_KEYS = sizeof(custom_shift_keys) / sizeof(custom_shift_key_t);
 
@@ -74,6 +76,9 @@ bool handle_q_prefix(uint16_t keycode, keyrecord_t* record) {
     return true; // Continue normal processing
 }
 
+bool numpad_held = false;
+bool specials_held = false;
+
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     // Check if we're in MACRO_LAYER and need to handle a Q-prefix
     if (current_layer == MACRO_LAYER && !handle_q_prefix(keycode, record)) {
@@ -89,12 +94,47 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 SEND_STRING(":s/");
             }
             break;
+        case MAC_EMAIL:
+            if (record->event.pressed) {
+                SEND_STRING("pjcfifa@gmail.com");
+            }
+            break;
+        case MAC_NAME:
+            if (record->event.pressed) {
+                SEND_STRING("Pat Cunniff");
+            }
+            break;
         case MAC_QUOT_SURROUND:
             if (record->event.pressed) {
                 SEND_STRING(":s/\\%V\\(.*\\)\\%V\\(.\\)/\"\\1\\2\"/");
                 tap_code(KC_ENT);
             }
             break;
+        case NUMPAD_MO:
+            if (record->event.pressed) {
+                layer_on(NUMPAD_LAYER);
+                numpad_held = true;
+            } else {
+                layer_off(NUMPAD_LAYER);
+                numpad_held = false;
+            }
+            break;
+        case SPECIALS_MO:
+            if (record->event.pressed) {
+                layer_on(SPECIALS_LAYER);
+                specials_held = true;
+            } else {
+                layer_off(SPECIALS_LAYER);
+                specials_held = false;
+            }
+            break;
+    }
+
+    // Handle SECONDARY_SPECIALS_LAYER based on combo
+    if (numpad_held && specials_held) {
+        layer_on(SECONDARY_SPECIALS_LAYER);
+    } else {
+        layer_off(SECONDARY_SPECIALS_LAYER);
     }
 
     return true;
@@ -107,20 +147,20 @@ void housekeeping_task_user(void) {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // ALPHA
     [ALPHA_LAYER] = LAYOUT_planck_2x2u(
-// TAB                 , Q                   , W      , E      , R                , T   , Y     , U   , I      , O              , P      , DEL    ,
-LT(ARROWS_LAYER,KC_TAB), LT(MACRO_LAYER,KC_Q), KC_W   , KC_E   , KC_R             , KC_T, KC_Y  , KC_U, KC_I   , KC_O           , KC_P   , KC_BSPC,
-MO(SPECIALS_LAYER)     , KC_A                , KC_S   , KC_D   , KC_F             , KC_G, KC_H  , KC_J, KC_K   , KC_L           , KC_QUOT, KC_ENT ,
-KC_LSFT                , KC_Z                , KC_X   , KC_C   , KC_V             , KC_B, KC_N  , KC_M, KC_COMM, KC_DOT         , KC_SLSH, KC_RSFT,
-KC_NO                  , KC_LCTL             , KC_LALT, KC_LGUI, OSL(NUMPAD_LAYER)      , KC_SPC      , KC_ESC , MO(MEDIA_LAYER), KC_LEFT, KC_RGHT
+// TAB                 , Q                   , W      , E      , R        , T   , Y     , U   , I      , O              , P      , DEL    ,
+LT(ARROWS_LAYER,KC_TAB), LT(MACRO_LAYER,KC_Q), KC_W   , KC_E   , KC_R     , KC_T, KC_Y  , KC_U, KC_I   , KC_O           , KC_P   , KC_BSPC,
+SPECIALS_MO            , KC_A                , KC_S   , KC_D   , KC_F     , KC_G, KC_H  , KC_J, KC_K   , KC_L           , KC_QUOT, KC_ENT ,
+KC_LSFT                , KC_Z                , KC_X   , KC_C   , KC_V     , KC_B, KC_N  , KC_M, KC_COMM, KC_DOT         , KC_SLSH, KC_RSFT,
+KC_NO                  , KC_LCTL             , KC_LALT, KC_LGUI, NUMPAD_MO      , KC_SPC      , KC_ESC , MO(MEDIA_LAYER), KC_LEFT, KC_RGHT
       ),
 
     // SPECIALS
     [SPECIALS_LAYER] = LAYOUT_planck_2x2u(
-// TAB , Q      , W      , E      , R                           , T         , Y      , U      , I      , O      , P      , DEL         ,
-KC_NO  , KC_GRV , KC_NO  , KC_NO  , KC_NO                       , KC_NO     , KC_NO  , KC_LCBR, KC_RCBR, KC_PLUS, KC_DQUO, KC_PIPE     ,
-KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO                       , KC_NO     , KC_SCLN, KC_LPRN, KC_RPRN, KC_EQL , KC_COLN, LSFT(KC_ENT),
-KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO                       , LCTL(KC_B), KC_NO  , KC_LBRC, KC_RBRC, KC_MINS, KC_BSLS, KC_TRNS     ,
-KC_NO  , KC_TRNS, KC_TRNS, KC_TRNS, MO(SECONDARY_SPECIALS_LAYER)            , KC_TRNS         , KC_TRNS, QK_LLCK, KC_TRNS, KC_TRNS     
+// TAB , Q      , W      , E      , R      , T         , Y      , U      , I      , O      , P      , DEL         ,
+KC_NO  , KC_GRV , KC_NO  , KC_NO  , KC_NO  , KC_NO     , KC_NO  , KC_LCBR, KC_RCBR, KC_PLUS, KC_DQUO, KC_PIPE     ,
+KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO     , KC_NO  , KC_LPRN, KC_RPRN, KC_EQL , KC_COLN, LSFT(KC_ENT),
+KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , LCTL(KC_B), KC_NO  , KC_LBRC, KC_RBRC, KC_MINS, KC_UNDS, KC_TRNS     ,
+KC_NO  , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS            , KC_TRNS         , KC_TRNS, QK_LLCK, KC_TRNS, KC_TRNS     
       ),
 
     // ARROWS
@@ -134,11 +174,11 @@ KC_NO  , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_TRNS         , KC_NO  , Q
 
     // NUMPAD
     [NUMPAD_LAYER] = LAYOUT_planck_2x2u(
-// TAB                      , Q      , W      , E      , R      , T    , Y      , U   , I   , O      , P      , DEL          ,
-KC_NO                       , KC_1   , KC_2   , KC_3   , KC_4   , KC_5 , KC_6   , KC_7, KC_8, KC_9   , KC_0   , LALT(KC_BSPC),
-MO(SECONDARY_SPECIALS_LAYER), KC_NO  , KC_F4  , KC_F5  , KC_F6  , KC_NO, KC_NO  , KC_4, KC_5, KC_6   , KC_NO  , KC_TRNS      ,
-KC_TRNS                     , KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_0   , KC_1, KC_2, KC_3   , KC_SLSH, KC_TRNS      ,
-KC_NO                       , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_UNDS      , KC_0, QK_LLCK, KC_TRNS, KC_TRNS      
+// TAB , Q      , W      , E      , R      , T    , Y      , U   , I   , O      , P      , DEL          ,
+KC_NO  , KC_1   , KC_2   , KC_3   , KC_4   , KC_5 , KC_6   , KC_7, KC_8, KC_9   , KC_0   , LALT(KC_BSPC),
+KC_TRNS, KC_NO  , KC_F4  , KC_F5  , KC_F6  , KC_NO, KC_NO  , KC_4, KC_5, KC_6   , KC_SCLN, KC_TRNS      ,
+KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO  , KC_1, KC_2, KC_3   , KC_BSLS, KC_TRNS      ,
+KC_NO  , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_TRNS      , KC_0, QK_LLCK, KC_TRNS, KC_TRNS      
       ),
 
     // MEDIA
@@ -152,11 +192,11 @@ KC_NO  , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_NO       , KC_NO  , QK_LL
 
     // MACRO
     [MACRO_LAYER] = LAYOUT_planck_2x2u(
-// TAB , Q      , W      , E      , R             , T      , Y      , U      , I      , O      , P                , DEL    ,
-KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, MAC_VIM_SEARCH, KC_TRNS, OM_BTN1, KC_TRNS, KC_TRNS, KC_TRNS, MAC_QUOT_SURROUND, KC_TRNS,
-KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS          , KC_TRNS,
-KC_TRNS, KC_UNDO, KC_TRNS, KC_TRNS, KC_TRNS       , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS          , KC_TRNS,
-KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS                , KC_TRNS         , KC_TRNS, QK_LLCK, KC_TRNS          , KC_TRNS
+// TAB , Q      , W      , E        , R             , T      , Y       , U      , I      , O      , P                , DEL    ,
+KC_TRNS, KC_TRNS, KC_TRNS, MAC_EMAIL, MAC_VIM_SEARCH, KC_TRNS, OM_BTN1 , KC_TRNS, KC_TRNS, KC_TRNS, MAC_QUOT_SURROUND, KC_TRNS,
+KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS  , KC_TRNS       , KC_TRNS, KC_TRNS , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS          , KC_TRNS,
+KC_TRNS, KC_UNDO, KC_TRNS, KC_TRNS  , KC_TRNS       , KC_TRNS, MAC_NAME, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS          , KC_TRNS,
+KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS  , KC_TRNS                , KC_TRNS          , KC_TRNS, QK_LLCK, KC_TRNS          , KC_TRNS
       ),
 
     // SECONDARY_SPECIALS
