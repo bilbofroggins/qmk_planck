@@ -20,7 +20,6 @@ enum custom_keycodes {
 
 const custom_shift_key_t custom_shift_keys[] = {
   {KC_QUOT, KC_COLN},
-  {KC_TAB, KC_TILD},
   {KC_COMM, KC_TILD},
 };
 uint8_t NUM_CUSTOM_SHIFT_KEYS = sizeof(custom_shift_keys) / sizeof(custom_shift_key_t);
