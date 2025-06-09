@@ -156,8 +156,8 @@ KC_NO                  , KC_LCTL             , KC_LALT, KC_LGUI, NUMPAD_MO      
     // SPECIALS
     [SPECIALS_LAYER] = LAYOUT_planck_2x2u(
 // TAB , Q      , W      , E      , R      , T         , Y      , U      , I      , O      , P      , DEL         ,
-KC_NO  , KC_GRV , KC_NO  , KC_NO  , KC_NO  , KC_NO     , KC_NO  , KC_LCBR, KC_RCBR, KC_PLUS, KC_DQUO, KC_PIPE     ,
-KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO     , KC_NO  , KC_LPRN, KC_RPRN, KC_EQL , KC_COLN, LSFT(KC_ENT),
+KC_NO  , KC_NO , KC_NO  , KC_NO  , KC_NO  , KC_NO     , KC_GRV  , KC_LCBR, KC_RCBR, KC_PLUS, KC_DQUO, KC_TRNS     ,
+KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO     , KC_PIPE  , KC_LPRN, KC_RPRN, KC_EQL , KC_COLN, LSFT(KC_ENT),
 KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , LCTL(KC_B), KC_NO  , KC_LBRC, KC_RBRC, KC_MINS, KC_UNDS, KC_TRNS     ,
 KC_NO  , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS            , KC_TRNS         , KC_TRNS, QK_LLCK, KC_TRNS, KC_TRNS     
       ),
@@ -165,7 +165,7 @@ KC_NO  , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS            , KC_TRNS         , KC_TR
     // ARROWS
     [ARROWS_LAYER] = LAYOUT_planck_2x2u(
 // TAB , Q      , W      , E      , R      , T    , Y      , U      , I      , O      , P      , DEL    ,
-KC_NO  , KC_NO  , KC_NO  , KC_UP  , KC_NO  , KC_NO, KC_NO  , KC_BSPC, KC_BSPC, KC_BSPC, KC_BSPC, KC_NO  ,
+KC_NO  , KC_NO  , KC_NO  , KC_UP  , KC_NO  , KC_NO, KC_HOME  , LCTL(KC_END), LCTL(KC_HOME), KC_END, KC_NO, KC_TRNS  ,
 KC_NO  , KC_NO  , KC_LEFT, KC_DOWN, KC_RGHT, KC_NO, KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, KC_NO  , KC_TRNS,
 KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_TRNS,
 KC_NO  , KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_TRNS         , KC_NO  , QK_LLCK, KC_TRNS, KC_TRNS
