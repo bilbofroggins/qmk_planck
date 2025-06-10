@@ -8,6 +8,7 @@ LAYER_LOCK_ENABLE = yes
 SRC += features/custom_shift_keys.c
 SRC += features/orbital_mouse.c
 MOUSE_ENABLE = yes
+EXTRAKEY_ENABLE = yes
 
 # DEBUG
 #CONSOLE_ENABLE = yes
