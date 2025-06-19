@@ -78,12 +78,17 @@ void keyboard_post_init_user(void) {
 
 bool numpad_held = false;
 bool specials_held = false;
+static bool osm_interrupted = false;
+static bool osm_active = false;
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     // Check if we're in MACRO_LAYER and need to handle a Q-prefix
     // if (current_layer == MACRO_LAYER && !handle_q_prefix(keycode, record)) {
     //     return false;
     // }
+    if (record->event.pressed && osm_active && keycode != NUMPAD_MO) {
+        osm_interrupted = true;
+    }
     
     if (!process_custom_shift_keys(keycode, record)) { return false; }
     if (!process_orbital_mouse(keycode, record)) { return false; }
@@ -112,11 +117,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             break;
         case NUMPAD_MO:
             if (record->event.pressed) {
+                osm_interrupted = false;
+                osm_active = true;
                 layer_on(NUMPAD_LAYER);
                 numpad_held = true;
             } else {
                 layer_off(NUMPAD_LAYER);
+                osm_active = false;
                 numpad_held = false;
+                if (!osm_interrupted) {
+                    set_oneshot_mods(MOD_BIT(KC_LSFT));
+                }
             }
             break;
         case SPECIALS_MO:
