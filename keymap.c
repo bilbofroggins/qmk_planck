@@ -76,8 +76,8 @@ void keyboard_post_init_user(void) {
 //     return true; // Continue normal processing
 // }
 
-bool numpad_held = false;
-bool specials_held = false;
+static bool numpad_held = false;
+static bool specials_held = false;
 static bool osm_interrupted = false;
 static bool osm_active = false;
 
