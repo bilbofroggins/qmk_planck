@@ -204,9 +204,9 @@ KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_TRNS       , KC_NO, KC_TR
     // MACRO
     [MACRO_LAYER] = LAYOUT_planck_2x2u(
 // TAB, Q    , W                , E        , R             , T    , Y       , U    , I    , O      , P      , DEL    ,
-KC_NO , KC_NO, MAC_QUOT_SURROUND, MAC_EMAIL, MAC_VIM_SEARCH, KC_NO, KC_NO   , KC_NO, KC_NO, KC_NO  , KC_NO  , KC_NO  ,
-KC_NO , KC_NO, KC_NO            , KC_NO    , KC_NO         , KC_NO, KC_NO   , KC_NO, KC_NO, KC_NO  , KC_NO  , KC_NO  ,
-KC_NO , KC_NO, KC_NO            , KC_NO    , KC_NO         , KC_NO, MAC_NAME, KC_NO, KC_NO, KC_NO  , KC_NO  , KC_NO  ,
+KC_NO , KC_NO, MAC_QUOT_SURROUND, MAC_EMAIL, MAC_VIM_SEARCH, KC_NO, KC_NO   , KC_NO, KC_NO, KC_NO  , KC_UP  , KC_NO  , 
+KC_NO , KC_NO, KC_NO            , KC_NO    , KC_NO         , KC_NO, KC_NO   , KC_NO, KC_NO, KC_LEFT, KC_DOWN, KC_RIGHT, 
+KC_NO , KC_NO, KC_NO            , KC_NO    , KC_NO         , KC_NO, MAC_NAME, KC_NO, KC_NO, KC_NO,   KC_NO,   KC_NO,
 KC_NO , KC_NO, KC_NO            , KC_NO    , KC_NO                , KC_NO          , KC_NO, KC_TRNS, KC_TRNS, QK_LLCK
 ),
 
