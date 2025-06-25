@@ -28,10 +28,10 @@ uint8_t NUM_CUSTOM_SHIFT_KEYS = sizeof(custom_shift_keys) / sizeof(custom_shift_
 #define CAPSLOCK_LAYER 1
 #define TAB_LAYER 2
 #define NUMPAD_LAYER 3
-#define FN_LAYER 4
+#define R_CORNER_LAYER 4
 #define MACRO_LAYER 5
 #define DOUBLE_LAYER 6
-#define CORNER_LAYER 7
+#define L_CORNER_LAYER 7
 
 // Track which layer we're currently in
 uint8_t current_layer = DEFAULT_LAYER;
@@ -158,11 +158,11 @@ void housekeeping_task_user(void) {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // ALPHA
     [DEFAULT_LAYER] = LAYOUT_planck_2x2u(
-// TAB              , Q      , W      , E      , R        , T   , Y     , U   , I      , O           , P      , DEL            ,
-LT(TAB_LAYER,KC_TAB), KC_Q   , KC_W   , KC_E   , KC_R     , KC_T, KC_Y  , KC_U, KC_I   , KC_O        , KC_P   , KC_BSPC        ,
-SPECIALS_MO         , KC_A   , KC_S   , KC_D   , KC_F     , KC_G, KC_H  , KC_J, KC_K   , KC_L        , KC_QUOT, KC_ENT         ,
-KC_LSFT             , KC_Z   , KC_X   , KC_C   , KC_V     , KC_B, KC_N  , KC_M, KC_COMM, KC_DOT      , KC_SLSH, KC_RSFT        ,
-MO(CORNER_LAYER)    , KC_LCTL, KC_HYPR, KC_LGUI, NUMPAD_MO      , KC_SPC      , KC_ESC , MO(FN_LAYER), KC_LALT, MO(MACRO_LAYER)
+// TAB              , Q      , W      , E      , R        , T   , Y     , U   , I      , O      , P              , DEL               ,
+LT(TAB_LAYER,KC_TAB), KC_Q   , KC_W   , KC_E   , KC_R     , KC_T, KC_Y  , KC_U, KC_I   , KC_O   , KC_P           , KC_BSPC           ,
+SPECIALS_MO         , KC_A   , KC_S   , KC_D   , KC_F     , KC_G, KC_H  , KC_J, KC_K   , KC_L   , KC_QUOT        , KC_ENT            ,
+KC_LSFT             , KC_Z   , KC_X   , KC_C   , KC_V     , KC_B, KC_N  , KC_M, KC_COMM, KC_DOT , KC_SLSH        , KC_RSFT           ,
+MO(L_CORNER_LAYER)  , KC_LCTL, KC_HYPR, KC_LGUI, NUMPAD_MO      , KC_SPC      , KC_ESC , KC_LALT, MO(MACRO_LAYER), MO(R_CORNER_LAYER)
       ),
 
     // CAPSLOCK
@@ -170,8 +170,8 @@ MO(CORNER_LAYER)    , KC_LCTL, KC_HYPR, KC_LGUI, NUMPAD_MO      , KC_SPC      , 
 // TAB , Q      , W      , E      , R      , T         , Y      , U      , I      , O      , P      , DEL         ,
 KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO     , KC_GRV , KC_LCBR, KC_RCBR, KC_PLUS, KC_DQUO, KC_TRNS     ,
 KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO     , KC_PIPE, KC_LPRN, KC_RPRN, KC_EQL , KC_COLN, LSFT(KC_ENT),
-KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , LCTL(KC_B), KC_NO  , KC_LBRC, KC_RBRC, KC_MINS, KC_BSLS , KC_TRNS     ,
-KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS            , KC_TRNS         , KC_TRNS, QK_LLCK, KC_TRNS, KC_TRNS     
+KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , LCTL(KC_B), KC_NO  , KC_LBRC, KC_RBRC, KC_MINS, KC_BSLS, KC_TRNS     ,
+KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS            , KC_TRNS         , KC_TRNS, KC_TRNS, KC_TRNS, QK_LLCK     
       ),
 
     // TAB
@@ -180,35 +180,35 @@ KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS            , KC_TRNS         , KC_TR
 KC_NO  , KC_NO  , KC_NO  , KC_UP  , KC_NO  , KC_NO, KC_HOME, LCTL(KC_END), LCTL(KC_HOME), KC_END , KC_NO  , KC_TRNS,
 KC_NO  , KC_NO  , KC_LEFT, KC_DOWN, KC_RGHT, KC_NO, KC_LEFT, KC_DOWN     , KC_UP        , KC_RGHT, KC_NO  , KC_TRNS,
 KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO  , KC_NO       , KC_NO        , KC_NO  , KC_NO  , KC_TRNS,
-KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_TRNS              , KC_NO        , QK_LLCK, KC_TRNS, KC_TRNS
-      ),
+KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_TRNS              , KC_NO        , KC_TRNS, KC_TRNS, QK_LLCK
+),
 
     // NUMPAD
     [NUMPAD_LAYER] = LAYOUT_planck_2x2u(
 // TAB , Q      , W      , E      , R      , T    , Y      , U   , I   , O      , P      , DEL    ,
 KC_NO  , KC_1   , KC_2   , KC_3   , KC_4   , KC_5 , KC_6   , KC_7, KC_8, KC_9   , KC_0   , KC_TRNS,
-KC_TRNS, KC_NO  , KC_F4  , KC_F5  , KC_F6  , KC_NO, KC_SCLN, KC_4, KC_5, KC_6   , KC_SCLN, KC_TRNS,
+KC_TRNS, KC_NO  , KC_F4  , KC_F5  , KC_F6  , KC_NO, KC_NO  , KC_4, KC_5, KC_6   , KC_SCLN, KC_TRNS,
 KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO  , KC_1, KC_2, KC_3   , KC_UNDS, KC_TRNS,
-KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_TRNS      , KC_0, QK_LLCK, KC_TRNS, KC_TRNS
-      ),
+KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_TRNS      , KC_0, KC_TRNS, KC_TRNS, QK_LLCK
+),
 
-    // FN
-    [FN_LAYER] = LAYOUT_planck_2x2u(
+    // R_CORNER_LAYER
+    [R_CORNER_LAYER] = LAYOUT_planck_2x2u(
 // TAB , Q      , W      , E      , R      , T    , Y      , U    , I    , O      , P      , DEL    ,
-KC_NO  , KC_NO  , KC_F7  , KC_F8  , KC_F9  , KC_NO, KC_NO  , KC_NO, KC_NO, KC_MUTE, KC_VOLD, KC_VOLU,
-KC_NO  , KC_NO  , KC_F4  , KC_F5  , KC_F6  , KC_NO, KC_NO  , KC_NO, KC_NO, KC_MPRV, KC_UP  , KC_MNXT,
-KC_TRNS, KC_NO  , KC_F1  , KC_F2  , KC_F3  , KC_NO, KC_NO  , KC_NO, KC_NO, KC_LEFT, KC_DOWN, KC_RGHT,
-KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_MPLY       , KC_NO, QK_LLCK, KC_TRNS, KC_TRNS
-      ),
+KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO  , KC_NO, KC_NO, KC_MUTE, KC_VOLD, KC_VOLU,
+KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO  , KC_NO, KC_NO, KC_MPRV, KC_MPLY, KC_MNXT,
+KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO  , KC_NO, KC_NO, KC_NO  , KC_NO  , KC_NO  ,
+KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_TRNS       , KC_NO, KC_TRNS, KC_TRNS, KC_TRNS
+),
 
     // MACRO
     [MACRO_LAYER] = LAYOUT_planck_2x2u(
-// TAB, Q    , W                , E        , R             , T    , Y       , U    , I    , O      , P    , DEL  ,
-KC_NO , KC_NO, MAC_QUOT_SURROUND, MAC_EMAIL, MAC_VIM_SEARCH, KC_NO, KC_NO   , KC_NO, KC_NO, KC_NO  , KC_NO, KC_NO,
-KC_NO , KC_NO, KC_NO            , KC_NO    , KC_NO         , KC_NO, KC_NO   , KC_NO, KC_NO, KC_NO  , KC_NO, KC_NO,
-KC_NO , KC_NO, KC_NO            , KC_NO    , KC_NO         , KC_NO, MAC_NAME, KC_NO, KC_NO, KC_NO  , KC_NO, KC_NO,
-KC_NO , KC_NO, KC_NO            , KC_NO    , KC_NO                , KC_NO          , KC_NO, QK_LLCK, KC_NO, KC_NO
-      ),
+// TAB, Q    , W                , E        , R             , T    , Y       , U    , I    , O      , P      , DEL    ,
+KC_NO , KC_NO, MAC_QUOT_SURROUND, MAC_EMAIL, MAC_VIM_SEARCH, KC_NO, KC_NO   , KC_NO, KC_NO, KC_NO  , KC_NO  , KC_NO  ,
+KC_NO , KC_NO, KC_NO            , KC_NO    , KC_NO         , KC_NO, KC_NO   , KC_NO, KC_NO, KC_NO  , KC_NO  , KC_NO  ,
+KC_NO , KC_NO, KC_NO            , KC_NO    , KC_NO         , KC_NO, MAC_NAME, KC_NO, KC_NO, KC_NO  , KC_NO  , KC_NO  ,
+KC_NO , KC_NO, KC_NO            , KC_NO    , KC_NO                , KC_NO          , KC_NO, KC_TRNS, KC_TRNS, QK_LLCK
+),
 
     // DOUBLE
     [DOUBLE_LAYER] = LAYOUT_planck_2x2u(
@@ -216,15 +216,15 @@ KC_NO , KC_NO, KC_NO            , KC_NO    , KC_NO                , KC_NO       
 KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO , KC_NO, KC_NO  , KC_NO  , KC_NO  , KC_NO  ,
 KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO , KC_LT, KC_GT  , KC_NO  , KC_NO  , KC_NO  ,
 KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO , KC_NO, KC_NO  , KC_NO  , KC_NO  , KC_TRNS,
-KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_SPC       , KC_TRNS, QK_LLCK, KC_TRNS, KC_TRNS
-        ),
+KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_SPC       , KC_TRNS, KC_TRNS, KC_TRNS, QK_LLCK
+),
 
-    // CORNER
-    [CORNER_LAYER] = LAYOUT_planck_2x2u(
+    // L_CORNER
+    [L_CORNER_LAYER] = LAYOUT_planck_2x2u(
 // TAB , Q      , W      , E      , R      , T    , Y     , U    , I      , O      , P      , DEL    ,
 QK_BOOT, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO , KC_NO, KC_NO  , KC_NO  , KC_NO  , KC_NO  ,
 KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO , KC_NO, KC_NO  , KC_NO  , KC_NO  , KC_NO  ,
 KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO , KC_NO, KC_NO  , KC_NO  , KC_NO  , KC_TRNS,
-KC_TRNS, OM_BTN2, OM_BTN1, KC_UNDO, KC_TRNS       , KC_SPC       , KC_TRNS, QK_LLCK, KC_TRNS, KC_TRNS
+KC_TRNS, OM_BTN2, OM_BTN1, KC_UNDO, KC_TRNS       , KC_SPC       , KC_TRNS, KC_TRNS, KC_TRNS, QK_LLCK
         ),
 };
