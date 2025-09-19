@@ -13,14 +13,14 @@ enum custom_keycodes {
     MAC_NAME,
     TAB_KEY,
     NUMPAD_MO,
-    SPECIALS_MO
+    SPECIALS_MO,
+    DELETE4
 };
 
 #define KC_UNDO LCMD(KC_Z)
 
 const custom_shift_key_t custom_shift_keys[] = {
   {KC_QUOT, KC_COLN},
-  {KC_COMM, KC_TILD},
 };
 uint8_t NUM_CUSTOM_SHIFT_KEYS = sizeof(custom_shift_keys) / sizeof(custom_shift_key_t);
 
@@ -78,22 +78,34 @@ void keyboard_post_init_user(void) {
 
 static bool numpad_held = false;
 static bool specials_held = false;
-static bool osm_interrupted = false;
-static bool osm_active = false;
+static bool osm_numpad_interrupted = false;
+static bool osm_numpad_active = false;
+static bool osm_caps_interrupted = false;
+static bool osm_caps_active = false;
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     // Check if we're in MACRO_LAYER and need to handle a Q-prefix
     // if (current_layer == MACRO_LAYER && !handle_q_prefix(keycode, record)) {
     //     return false;
     // }
-    if (record->event.pressed && osm_active && keycode != NUMPAD_MO) {
-        osm_interrupted = true;
+    if (record->event.pressed && osm_numpad_active && keycode != NUMPAD_MO) {
+        osm_numpad_interrupted = true;
+    }
+    if (record->event.pressed && osm_caps_active && keycode != NUMPAD_MO) {
+        osm_caps_interrupted = true;
     }
     
     if (!process_custom_shift_keys(keycode, record)) { return false; }
     if (!process_orbital_mouse(keycode, record)) { return false; }
 
     switch (keycode) {
+        case DELETE4:
+            if (record->event.pressed) {
+                for (uint8_t i = 0; i < 4; i++) {
+                    tap_code(KC_BSPC);
+                }
+            }
+            break;
         case MAC_VIM_SEARCH:
             if (record->event.pressed) {
                 SEND_STRING(":s/");
@@ -117,26 +129,32 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             break;
         case NUMPAD_MO:
             if (record->event.pressed) {
-                osm_interrupted = false;
-                osm_active = true;
+                osm_numpad_interrupted = false;
+                osm_numpad_active = true;
                 layer_on(NUMPAD_LAYER);
                 numpad_held = true;
             } else {
                 layer_off(NUMPAD_LAYER);
-                osm_active = false;
+                osm_numpad_active = false;
                 numpad_held = false;
-                if (!osm_interrupted) {
+                if (!osm_numpad_interrupted) {
                     set_oneshot_mods(MOD_BIT(KC_LSFT));
                 }
             }
             break;
         case SPECIALS_MO:
             if (record->event.pressed) {
+                osm_caps_interrupted = false;
+                osm_caps_active = true;
                 layer_on(CAPSLOCK_LAYER);
                 specials_held = true;
             } else {
                 layer_off(CAPSLOCK_LAYER);
                 specials_held = false;
+                osm_caps_active = false;
+                if (!osm_caps_interrupted) {
+                    tap_code16(KC_UNDS);
+                }
             }
             break;
     }
@@ -168,9 +186,9 @@ MO(L_CORNER_LAYER)  , KC_LCTL, KC_HYPR, KC_LGUI, NUMPAD_MO      , KC_SPC      , 
     // CAPSLOCK
     [CAPSLOCK_LAYER] = LAYOUT_planck_2x2u(
 // TAB , Q      , W      , E      , R      , T         , Y      , U      , I      , O      , P      , DEL         ,
-KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO     , KC_GRV , KC_LCBR, KC_RCBR, KC_PLUS, KC_DQUO, KC_TRNS     ,
+KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO     , KC_NO , KC_LCBR, KC_RCBR, KC_PLUS, KC_NO, KC_TRNS     ,
 KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO     , KC_PIPE, KC_LPRN, KC_RPRN, KC_EQL , KC_COLN, LSFT(KC_ENT),
-KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , LCTL(KC_B), KC_NO  , KC_LBRC, KC_RBRC, KC_MINS, KC_BSLS, KC_TRNS     ,
+KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , LCTL(KC_B), KC_NO  , KC_LBRC, KC_RBRC, KC_MINS, KC_UNDS , KC_TRNS     ,
 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS            , KC_TRNS         , KC_TRNS, KC_TRNS, KC_TRNS, QK_LLCK     
       ),
 
@@ -186,12 +204,12 @@ KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_TRNS              , KC_NO
     // NUMPAD
     [NUMPAD_LAYER] = LAYOUT_planck_2x2u(
 // TAB , Q      , W      , E      , R      , T    , Y      , U   , I   , O      , P      , DEL    ,
-KC_NO  , KC_1   , KC_2   , KC_3   , KC_4   , KC_5 , KC_6   , KC_7, KC_8, KC_9   , KC_0   , KC_TRNS,
-KC_TRNS, KC_NO  , KC_F4  , KC_F5  , KC_F6  , KC_NO, KC_NO  , KC_4, KC_5, KC_6   , KC_SCLN, KC_TRNS,
-KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO  , KC_1, KC_2, KC_3   , KC_UNDS, KC_TRNS,
+KC_TILD, KC_1   , KC_2   , KC_3   , KC_4   , KC_5 , KC_6   , KC_7, KC_8, KC_9   , KC_0   , DELETE4,
+KC_TRNS, KC_GRV , KC_LT  , KC_DQUO, KC_NO  , KC_GT, KC_NO  , KC_4, KC_5, KC_6   , KC_SCLN, KC_TRNS,
+KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO  , KC_1, KC_2, KC_3   , KC_BSLS, KC_TRNS,
 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_TRNS      , KC_0, KC_TRNS, KC_TRNS, QK_LLCK
 ),
-
+    
     // R_CORNER_LAYER
     [R_CORNER_LAYER] = LAYOUT_planck_2x2u(
 // TAB , Q      , W      , E      , R      , T    , Y      , U    , I    , O      , P      , DEL    ,
@@ -214,7 +232,7 @@ KC_NO , KC_NO, KC_NO            , KC_NO    , KC_NO                , KC_NO       
     [DOUBLE_LAYER] = LAYOUT_planck_2x2u(
 // TAB , Q      , W      , E      , R      , T    , Y     , U    , I      , O      , P      , DEL    ,
 KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO , KC_NO, KC_NO  , KC_NO  , KC_NO  , KC_NO  ,
-KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO , KC_LT, KC_GT  , KC_NO  , KC_NO  , KC_NO  ,
+KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO , KC_NO, KC_NO  , KC_NO  , KC_NO  , KC_NO  ,
 KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_NO , KC_NO, KC_NO  , KC_NO  , KC_NO  , KC_TRNS,
 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_SPC       , KC_TRNS, KC_TRNS, KC_TRNS, QK_LLCK
 ),
