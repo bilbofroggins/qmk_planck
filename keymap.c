@@ -195,7 +195,7 @@ KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_TRNS              , KC_NO
     // NUMPAD
     [NUMPAD_LAYER] = LAYOUT_planck_2x2u(
 // TAB , Q      , W      , E      , R      , T    , Y      , U   , I   , O      , P      , DEL    ,
-KC_TILD, KC_1   , KC_2   , KC_3   , KC_4   , KC_5 , KC_6   , KC_7, KC_8, KC_9   , KC_0   , KC_TRNS,
+KC_TILD, KC_1   , KC_2   , KC_3   , KC_4   , KC_5 , KC_6   , KC_7, KC_8, KC_9   , KC_0   , LALT(KC_BSPC),
 KC_TRNS, KC_GRV , KC_LT  , KC_DQUO, KC_NO  , KC_GT, KC_COMM, KC_4, KC_5, KC_6   , KC_SCLN, KC_TRNS,
 KC_TRNS, KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO, KC_DOT , KC_1, KC_2, KC_3   , KC_BSLS, KC_TRNS,
 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS       , KC_TRNS      , KC_0, KC_TRNS, KC_TRNS, QK_LLCK
